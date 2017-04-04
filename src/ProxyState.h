@@ -3,6 +3,8 @@
 
 using namespace std;
 
+#define MAX_URL_LEN MAX_PATH
+
 class ProxyState
 {
 public:
@@ -12,11 +14,11 @@ public:
 
 protected:
 	bool enabled;
-	string url;
+	char  url[MAX_URL_LEN];
 
 public:
 	bool isEnabled();
-	int setUrl(string url);
+	int setUrl(char *newurl);
 	string getUrl();
 	int setEnabled(bool state);
 };
