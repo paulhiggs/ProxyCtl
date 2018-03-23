@@ -3,7 +3,7 @@
 
 using namespace std;
 
-#define MAX_URL_LEN MAX_PATH
+#define MAX_URL_LEN MAX_PATH*4
 
 class ProxyState
 {
@@ -11,15 +11,21 @@ public:
 	ProxyState();
 	~ProxyState();
 
+//	friend ostream& operator<<(ostream& ost, const ProxyState& ps);
 
-protected:
+private:
 	bool enabled;
-	char  url[MAX_URL_LEN];
+	bool verbose;
+	char url[MAX_URL_LEN];
 
 public:
-	bool isEnabled();
+	void setVerbose(bool argVerbose) { verbose = argVerbose; };
+	bool isVerbose(void);
+	bool isEnabled() { return enabled; };
 	int setUrl(char *newurl);
-	string getUrl();
+	string getUrl() { return url; };
 	int setEnabled(bool state);
+
+	LONG readProxyState(void);
 };
 
