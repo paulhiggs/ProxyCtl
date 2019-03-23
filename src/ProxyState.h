@@ -1,6 +1,6 @@
 #pragma once
 #include <string>
-
+ 
 using namespace std;
 
 #define MAX_URL_LEN MAX_PATH*4

@@ -11,7 +11,7 @@
 // damage or loss of business that this software may cause.
 //
 ///////////////////////////////////////////////////////////////////////////////
-
+ 
 #ifndef XGETOPT_H
 #define XGETOPT_H
 

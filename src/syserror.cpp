@@ -1,5 +1,5 @@
 #include "syserror.h"
-
+ 
 
 OSErrorMan::OSErrorMan()
 {

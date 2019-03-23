@@ -1,5 +1,5 @@
 // ProxyCtl.cpp : Defines the entry point for the console application.
-//
+// 
 
 #include "stdafx.h"
 
@@ -16,15 +16,25 @@ using namespace std;
 
 #define VERSION "0.2"
 
-typedef struct item_t { const char *name; const char *value; } item_t;
+typedef struct item_t { const char *name; const char *value; const char *description;  } item_t;
 item_t known_proxy_table[] = {
-	{ "us", "proxyus3.huawei.com:8080" },
-	{ "au", "proxyau.huawei.com:8080" },
-	{ "uk", "proxyuk.huawei.com:8080" },
-	{ "de", "proxyde.huawei.com:8080" },
-	{ "sz", "proxysz.huawei.com:8080" },
-	{ "hk", "proxyhk.huawei.com:8080" },
-	{ NULL, NULL }
+	{ "au", "proxyau.huawei.com:8080", "Australia" },
+    { "ba", "proxybh.huawei.com:8080", "Bahrain" },
+    { "br", "proxybh.huawei.com:8080", "Brazil" },
+	{ "ch", "proxych.huawei.com:8080", "Switzerland" },
+	{ "cn", "proxycn2.huawei.com:8080", "China" },   
+	{ "de", "proxyde.huawei.com:8080", "Germany" },
+	{ "fi", "proxyfi.huawei.com:8080", "Finland" },
+	{ "hk", "proxyhk.huawei.com:8080", "Hong Kong" },
+	{ "in", "proxyblr.huawei.com:8080", "India" },
+	{ "jp", "proxyjp.huawei.com:8080", "Japan" },
+	{ "nj", "proxynj.huawei.com:8080", "Nanjing" },
+	{ "no", "proxych.huawei.com:8080", "Norway" },
+	{ "ru", "proxyru.huawei.com:8080", "Russia" },
+	{ "sz", "proxysz.huawei.com:8080", "Shenzhen" },
+	{ "uk", "proxyuk.huawei.com:8080", "UK" },
+	{ "us", "proxyus.huawei.com:8080", "USA" },
+{ NULL, NULL, NULL }
 };
 
 const char * proxylookup(const char *name)
@@ -44,7 +54,7 @@ void usage(char *progname) {
 	int i = 0;
 	while (known_proxy_table[i].name != NULL) {
 		if (i == 0) cout << "known proxies:" << endl;
-		cout << "  " << known_proxy_table[i].name << "-->" << known_proxy_table[i].value << endl;
+		cout << "  " << known_proxy_table[i].name << "(" << known_proxy_table[i].description << ")" << "-->" << known_proxy_table[i].value << endl;
 		i++;
 	}
 }
@@ -105,7 +115,7 @@ int main(int argc, char *argv[])
 				}
 				break;
 			default:
-				cout << "invalud argument " << argv[optind-1] << endl;
+				cout << "invalid argument " << argv[optind-1] << endl;
 				argsOK = false;
 				break;
 			}
