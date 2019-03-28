@@ -14,7 +14,7 @@
 using namespace std;
 
 
-#define VERSION "0.2"
+#define VERSION "0.3"
 
 typedef struct item_t { const char *name; const char *value; const char *description;  } item_t;
 item_t known_proxy_table[] = {
@@ -49,7 +49,7 @@ const char * proxylookup(const char *name)
 
 
 void usage(char *progname) {
-	cout << "version: "<< VERSION << endl << "usage: " << progname << " [-h | [-e | -d] [-p <abbr>] [<proxyHost>]]" << endl;
+	cout << "version: "<< VERSION << endl << "usage: " << progname << " [-h | [-c] [-e | -d] [-p <abbr>] [<proxyHost>]]" << endl;
 	
 	int i = 0;
 	while (known_proxy_table[i].name != NULL) {
@@ -85,12 +85,15 @@ int main(int argc, char *argv[])
 		int c;
 		optind = 0;		// this does not normally have to be done, but in
 						// this app we may be calling getopt again
-		bool argEnable=false, argDisable=false, argsOK=true, needHelp=false, abortArgs=false;
+		bool showConfig = false, argEnable = false, argDisable = false, argsOK = true, needHelp = false, abortArgs = false;
 
-		while ( !abortArgs && ((c = getopt(argc, argv, "vhedp:")) != EOF))
+		while ( !abortArgs && ((c = getopt(argc, argv, "cvhedp:")) != EOF))
 		{
 			switch (c)
 			{
+			case 'c':
+				showConfig = true;
+				break;
 			case 'v':
 				p.setVerbose(true);
 				break;
@@ -193,8 +196,13 @@ int main(int argc, char *argv[])
 				else cout << "proxy disabled" << endl;
 			}
 
-			if (p.isVerbose() && !argEnable && !argDisable && !knownHost && !specifiedHost)
+			if (p.isVerbose() && !argEnable && !argDisable && !knownHost && !specifiedHost && !showConfig)
 				cout << (p.isEnabled() ? "enabled" : "disabled") << "; url: " << p.getUrl() << endl;
+
+			if (showConfig) {
+				cout << (p.isEnabled() ? "enabled" : "disabled") << "; url: " << p.getUrl() << endl;
+				cout << "  bypass: " << p.getBypass() << endl;
+			}
 		}
 		else
 			usage(argv[0]);

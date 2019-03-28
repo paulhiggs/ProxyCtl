@@ -21,6 +21,7 @@ using namespace std;
 const char *ProxyKeyLocation = "Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings";
 const char *ProxyServerKey = "ProxyServer";
 const char *ProxyEnableKey = "ProxyEnable";
+const char *ProxyBypassKey = "ProxyOverRide";
 
 
 ProxyState::ProxyState()
@@ -78,6 +79,30 @@ LONG ProxyState::readProxyState(void)
 	return ERROR_SUCCESS;
 }
 #else
+
+LONG readKey(HKEY hkeyDXVer, const char *key, char *result, DWORD resultLen) {
+	char Buffer[50 * MAX_PATH];
+	DWORD BufferSize, dwBuffer, Type;
+	LONG  lResult;
+
+	strcpy(Buffer, ""); BufferSize = sizeof(Buffer);
+	if ((lResult = RegQueryValueEx(hkeyDXVer, key, NULL,
+		(LPDWORD)&Type,
+		(LPBYTE)&Buffer,
+		&BufferSize)
+		) == ERROR_SUCCESS)
+	{
+		if (Type == REG_SZ) { strncpy(result, Buffer, resultLen); }
+	}
+	else
+	{
+		// report the RegQueryValueEx() error
+		OSErrorMan e(lResult);
+		cerr << "Error in RegOpenKeyEx(" << key << "): " << e << endl;
+		return lResult;
+	}
+	return ERROR_SUCCESS;
+}
 LONG ProxyState::readProxyState(void)
 {
 	if (verbose)
@@ -113,6 +138,9 @@ LONG ProxyState::readProxyState(void)
 		return lResult;
 	}
 
+	if ((lResult = readKey(hkeyDXVer, ProxyServerKey, url, sizeof(url))) != ERROR_SUCCESS)
+		return lResult;
+	/*
 	strcpy(Buffer, ""); BufferSize = sizeof(Buffer);
 	if ((lResult = RegQueryValueEx(hkeyDXVer, ProxyServerKey, NULL,
 		(LPDWORD)&Type,
@@ -129,7 +157,27 @@ LONG ProxyState::readProxyState(void)
 		cerr << "Error in RegOpenKeyEx(" << ProxyServerKey << "): " << e << endl;
 		return lResult;
 	}
-
+	*/
+	if ((lResult = readKey(hkeyDXVer, ProxyBypassKey, bypass, sizeof(bypass))) != ERROR_SUCCESS)
+		return lResult;
+	/*
+	strcpy(Buffer, ""); BufferSize = sizeof(Buffer);
+	if ((lResult = RegQueryValueEx(hkeyDXVer, ProxyBypassKey, NULL,
+		(LPDWORD)&Type,
+		(LPBYTE)&Buffer,
+		&BufferSize)
+		) == ERROR_SUCCESS)
+	{
+		if (Type == REG_SZ) { strncpy(bypass, Buffer, sizeof(bypass)); }
+	}
+	else
+	{
+		// report the RegQueryValueEx() error
+		OSErrorMan e(lResult);
+		cerr << "Error in RegOpenKeyEx(" << ProxyBypassKey << "): " << e << endl;
+		return lResult;
+	}
+	*/
 	return ERROR_SUCCESS;
 }
 

@@ -17,6 +17,7 @@ private:
 	bool enabled;
 	bool verbose;
 	char url[MAX_URL_LEN];
+	char bypass[10 * 1024];
 
 public:
 	void setVerbose(bool argVerbose) { verbose = argVerbose; };
@@ -24,6 +25,7 @@ public:
 	bool isEnabled() { return enabled; };
 	int setUrl(char *newurl);
 	string getUrl() { return url; };
+	string getBypass() { return bypass; };
 	int setEnabled(bool state);
 
 	LONG readProxyState(void);
